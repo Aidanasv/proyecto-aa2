@@ -43,5 +43,9 @@ public class ArtistEfRepository : IArtistEfRepository
         await _dbContext.SaveChangesAsync();
         return true;
     }
+    public async Task<Artist?> GetAlbumsByArtist(int id)
+    {
+        return _dbContext.Artists.Include(artist => artist.Albums).FirstOrDefault(artist => artist.Id == id);
+    }
 
 }

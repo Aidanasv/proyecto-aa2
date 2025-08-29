@@ -12,7 +12,6 @@ public class TrackCreate
     public int AlbumId { get; set; }
     public int Duration { get; set; }
     public DateTime ReleaseDate { get; set; }
-    public string Link { get; set; }
     public int Plays { get; set; }
     public bool SoftDelete { get; set; }
 }

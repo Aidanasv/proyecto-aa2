@@ -6,8 +6,6 @@ namespace Models;
 public class PlaylistCreate
 {
     public string Name { get; set; }
-    [ForeignKey("User")]
-    public int UserId { get; set; }
     public string Description { get; set; }
     public bool SoftDelete { get; set; }
 }
@@ -20,5 +18,8 @@ public class PlaylistRead : PlaylistCreate
 public class Playlist : PlaylistRead
 {
     public User User { get; set; }
+    [ForeignKey("User")]
+    public int UserId { get; set; }
+
     public List<Track> Tracks { get; set; }
 }

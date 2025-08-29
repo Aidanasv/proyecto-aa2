@@ -10,5 +10,6 @@ public interface IArtistEfRepository
     Task AddAsync(Artist artist);
     Task UpdateAsync(Artist artist);
     Task<bool> DeleteAsync(int id);
+    Task<Artist?> GetAlbumsByArtist(int id);
 
 }

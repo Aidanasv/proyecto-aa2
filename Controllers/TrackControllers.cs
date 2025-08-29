@@ -1,5 +1,6 @@
 namespace Controllers;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services;
@@ -34,20 +35,48 @@ public class TrackController : ControllerBase
         return Ok(track);
     }
 
+    [Authorize(Roles = Role.Admin)]
     [HttpPost]
     public async Task<ActionResult<TrackRead>> CreateTrack(TrackCreate track)
     {
-        await _trackService.AddAsync(track);
-        return CreatedAtAction(nameof(GetTracks), track);
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var newTrack = await _trackService.AddAsync(track);
+            return CreatedAtAction(
+                nameof(GetTrackById),
+                new { id = newTrack.Id },
+                newTrack
+            );
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateTrack(int id, TrackCreate updatedTrack)
     {
-        await _trackService.UpdateAsync(updatedTrack, id);
-        return NoContent();
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            updatedTrack = await _trackService.UpdateAsync(updatedTrack, id);
+            return Ok(updatedTrack);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
-    
+
+    [Authorize(Roles = Role.Admin)]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTrack(int id)
     {
@@ -57,6 +86,14 @@ public class TrackController : ControllerBase
             return NotFound();
         }
         await _trackService.DeleteAsync(id);
-        return NoContent();
+        return Ok();
+    }
+
+    [HttpGet("audio/{id}")]
+    public async Task<IActionResult> GetAudio(int id)
+    {
+        var contentType = "audio/mpeg";
+        var audio = await _trackService.GetAudio(id);
+        return File(audio, contentType);
     }
 }

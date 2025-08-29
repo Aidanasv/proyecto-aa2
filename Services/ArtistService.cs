@@ -22,7 +22,7 @@ public class ArtistService : IArtistService
         return await _artistRepository.GetByIdAsync(id);
     }
 
-    public async Task AddAsync(ArtistCreate artistCreate)
+    public async Task<Artist> AddAsync(ArtistCreate artistCreate)
     {
         var artist = new Artist
         {
@@ -35,9 +35,10 @@ public class ArtistService : IArtistService
         };
 
         await _artistRepository.AddAsync(artist);
+        return artist;
     }
 
-    public async Task UpdateAsync(ArtistCreate artist, int id)
+    public async Task<Artist> UpdateAsync(ArtistCreate artist, int id)
     {
         var updatedArtist = await _artistRepository.GetByIdAsync(id);
         if (updatedArtist == null)
@@ -51,6 +52,7 @@ public class ArtistService : IArtistService
         updatedArtist.Imagen = artist.Imagen;
 
         await _artistRepository.UpdateAsync(updatedArtist);
+        return updatedArtist;
     }
 
     public async Task DeleteAsync(int id)
@@ -63,6 +65,33 @@ public class ArtistService : IArtistService
         artist.SoftDelete = true;
 
         await _artistRepository.UpdateAsync(artist);
+    }
+
+    
+    public async Task<ArtistDto?> GetAlbumsByArtist(int id)
+    {
+        var artist = await _artistRepository.GetAlbumsByArtist(id);
+        if (artist == null)
+        {
+            throw KeyNotFoundException("Artista no encontrado");
+        }
+        var artistDto = new ArtistDto
+        {
+            Name = artist.Name,
+            Biography = artist.Biography,
+            Id = artist.Id,
+            Followers = artist.Followers,
+            Albums = artist.Albums.Select(album => new AlbumDto
+            {
+                Id = album.Id,
+                Name = album.Name,
+                ReleaseDate = album.ReleaseDate,
+                Imagen = album.Imagen,
+                ArtistId = album.ArtistId
+
+            }).ToList(),
+        };
+        return artistDto;
     }
 
     private Exception KeyNotFoundException(string v)

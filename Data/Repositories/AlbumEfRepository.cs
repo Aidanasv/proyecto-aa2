@@ -33,7 +33,7 @@ public class AlbumEfRepository : IAlbumEfRepository
         _dbContext.Albums.Update(album);
         await _dbContext.SaveChangesAsync();
     }
-    
+
     public async Task<bool> DeleteAsync(int id)
     {
         var album = await _dbContext.Albums.FindAsync(id);
@@ -42,6 +42,11 @@ public class AlbumEfRepository : IAlbumEfRepository
         _dbContext.Albums.Remove(album);
         await _dbContext.SaveChangesAsync();
         return true;
+    }
+    
+    public async Task<Album?> GetTracksByAlbum(int id)
+    {
+        return _dbContext.Albums.Include(album => album.Tracks).FirstOrDefault(album => album.Id == id);
     }
 
 }

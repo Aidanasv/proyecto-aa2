@@ -9,7 +9,6 @@ public class AlbumCreate
     [ForeignKey("Artist")]
     public int ArtistId { get; set; }
     public DateTime ReleaseDate { get; set; }
-    public List<Track> Tracks { get; set; }
     public int Duration { get; set; }
     public string Imagen { get; set; }
     public bool SoftDelete { get; set; }
@@ -24,5 +23,6 @@ public class AlbumRead : AlbumCreate
 public class Album : AlbumRead
 {
     public Artist Artist { get; set; }
+    public List<Track> Tracks { get; set; }
 }
 

@@ -10,4 +10,5 @@ public interface IAlbumEfRepository
     Task AddAsync(Album album);
     Task UpdateAsync(Album album);
     Task<bool> DeleteAsync(int id);
+    Task<Album?> GetTracksByAlbum(int id);
 }

@@ -1,5 +1,6 @@
 namespace Controllers;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services;
@@ -24,7 +25,7 @@ public class ArtistController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<Artist>> GetArtistById(int id)
+    public async Task<ActionResult<ArtistRead>> GetArtistById(int id)
     {
         var artist = await _artistService.GetByIdAsync(id);
         if (artist == null)
@@ -34,20 +35,50 @@ public class ArtistController : ControllerBase
         return Ok(artist);
     }
 
+    [Authorize(Roles = Role.Admin)]
     [HttpPost]
-    public async Task<ActionResult<Artist>> CreateArtist(Artist artist)
+    public async Task<ActionResult<ArtistRead>> CreateArtist(ArtistCreate artist)
     {
-        await _artistService.AddAsync(artist);
-        return CreatedAtAction(nameof(GetArtists), new { id = artist.Id }, artist);
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var newArtist = await _artistService.AddAsync(artist);
+            return CreatedAtAction(
+                nameof(GetArtistById),
+                new { id = newArtist.Id },
+                newArtist
+            );
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+
     }
 
+    [Authorize(Roles = Role.Admin)]
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateArtist(int id, Artist updatedArtist)
+    public async Task<ActionResult<ArtistRead>> UpdateArtist(int id, ArtistCreate updatedArtist)
     {
-        await _artistService.UpdateAsync(updatedArtist, id);
-        return NoContent();
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            updatedArtist = await _artistService.UpdateAsync(updatedArtist, id);
+            return Ok(updatedArtist);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
+    [Authorize(Roles = Role.Admin)]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteArtist(int id)
     {
@@ -57,7 +88,18 @@ public class ArtistController : ControllerBase
             return NotFound();
         }
         await _artistService.DeleteAsync(id);
-        return NoContent();
+        return Ok();
+    }
+    
+     [HttpGet("{id}/albums")]
+    public async Task<ActionResult<ArtistDto>> GetAlbumsByArtists(int id)
+    {
+        var albums = await _artistService.GetAlbumsByArtist(id);
+        if (albums == null)
+        {
+            return NoContent();
+        }
+        return Ok(albums);
     }
 
 }

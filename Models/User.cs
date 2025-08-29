@@ -1,9 +1,6 @@
 namespace Models;
 
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-
 
 public class UserAuth
 {
@@ -17,8 +14,7 @@ public class UserCreate : UserAuth
     public DateTime BirthDate { get; set; }
     public DateTime CreateDate { get; set; }
     public DateTime LastLogin { get; set; }
-    [ForeignKey("TypeUser")]
-    public int TypeUserId { get; set; }
+    public string Role { get; set; }
 }
 
 public class UserRead : UserCreate
@@ -29,7 +25,11 @@ public class UserRead : UserCreate
 public class User : UserRead
 {
     public List<Playlist> Playlists { get; set; }
-    public TypeUser TypeUser { get; set; }
 
 }
 
+public class UserToken
+{
+    public int Id { get; set; }
+    public string Role { get; set; }
+}

@@ -124,10 +124,6 @@ namespace proyecto_aa2.Migrations
                     b.Property<int>("Duration")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Link")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -148,21 +144,6 @@ namespace proyecto_aa2.Migrations
                     b.HasIndex("ArtistId");
 
                     b.ToTable("Tracks");
-                });
-
-            modelBuilder.Entity("Models.TypeUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TypeUsers");
                 });
 
             modelBuilder.Entity("Models.User", b =>
@@ -192,8 +173,9 @@ namespace proyecto_aa2.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("TypeUserId")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -201,9 +183,21 @@ namespace proyecto_aa2.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TypeUserId");
-
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "admin@svalero.com",
+                            LastLogin = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Admin",
+                            Password = "090801",
+                            Role = "admin",
+                            Username = "admin"
+                        });
                 });
 
             modelBuilder.Entity("PlaylistTrack", b =>
@@ -260,17 +254,6 @@ namespace proyecto_aa2.Migrations
                     b.Navigation("Album");
 
                     b.Navigation("Artist");
-                });
-
-            modelBuilder.Entity("Models.User", b =>
-                {
-                    b.HasOne("Models.TypeUser", "TypeUser")
-                        .WithMany()
-                        .HasForeignKey("TypeUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TypeUser");
                 });
 
             modelBuilder.Entity("PlaylistTrack", b =>

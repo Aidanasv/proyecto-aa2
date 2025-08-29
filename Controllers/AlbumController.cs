@@ -3,6 +3,7 @@ namespace Controllers;
 using Models;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using Microsoft.AspNetCore.Authorization;
 
 [Route("albums")]
 [ApiController]
@@ -34,20 +35,48 @@ public class AlbumController : ControllerBase
         return Ok(album);
     }
 
+    [Authorize(Roles = Role.Admin)]
     [HttpPost]
     public async Task<ActionResult<AlbumRead>> CreateAlbum(AlbumCreate album)
     {
-        await _albumService.AddAsync(album);
-        return CreatedAtAction(nameof(GetAlbums), album);
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var newAlbum = await _albumService.AddAsync(album);
+            return CreatedAtAction(
+                nameof(GetAlbumById),
+                new { id = newAlbum.Id },
+                newAlbum
+            );
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAlbum(int id, AlbumCreate updatedAlbum)
     {
-        await _albumService.UpdateAsync(updatedAlbum, id);
-        return NoContent();
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            updatedAlbum = await _albumService.UpdateAsync(updatedAlbum, id);
+            return Ok(updatedAlbum);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
-    
+
+    [Authorize(Roles = Role.Admin)]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAlbum(int id)
     {
@@ -57,7 +86,18 @@ public class AlbumController : ControllerBase
             return NotFound();
         }
         await _albumService.DeleteAsync(id);
-        return NoContent();
+        return Ok();
+    }
+
+    [HttpGet("{id}/tracks")]
+    public async Task<ActionResult<AlbumTrackDTO>> GetTracksByAlbum(int id)
+    {
+        var albums = await _albumService.GetTracksByAlbum(id);
+        if (albums == null)
+        {
+            return NoContent();
+        }
+        return Ok(albums);
     }
 
 }

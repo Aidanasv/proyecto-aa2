@@ -2,7 +2,6 @@ namespace Services;
 
 using System;
 using Data;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Models;
 
 public class AlbumService : IAlbumService
@@ -24,7 +23,7 @@ public class AlbumService : IAlbumService
         return await _albumRepository.GetByIdAsync(id);
     }
 
-    public async Task AddAsync(AlbumCreate albumCreate)
+    public async Task<Album> AddAsync(AlbumCreate albumCreate)
     {
         var album = new Album
         {
@@ -37,9 +36,10 @@ public class AlbumService : IAlbumService
 
         };
         await _albumRepository.AddAsync(album);
+        return album;
     }
 
-    public async Task UpdateAsync(AlbumCreate album, int id)
+    public async Task<Album> UpdateAsync(AlbumCreate album, int id)
     {
         var updatedAlbum = await _albumRepository.GetByIdAsync(id);
         if (updatedAlbum == null)
@@ -53,6 +53,7 @@ public class AlbumService : IAlbumService
         updatedAlbum.Imagen = album.Imagen;
 
         await _albumRepository.UpdateAsync(updatedAlbum);
+        return updatedAlbum;
     }
 
     public async Task DeleteAsync(int id)
@@ -65,6 +66,30 @@ public class AlbumService : IAlbumService
         album.SoftDelete = true;
 
         await _albumRepository.UpdateAsync(album);
+    }
+
+    public async Task<AlbumTrackDTO?> GetTracksByAlbum(int id)
+    {
+        var album = await _albumRepository.GetTracksByAlbum(id);
+        if (album == null)
+        {
+            throw KeyNotFoundException("Album no encontrado");
+        }
+        var trackDTO = new AlbumTrackDTO
+        {
+            Name = album.Name,
+            Tracks = album.Tracks.Select(track => new TrackDto
+            {
+                Id = track.Id,
+                Name = track.Name,
+                Duration = track.Duration
+
+            }).ToList(),
+            Id = album.Id,
+            ReleaseDate = album.ReleaseDate,
+            ArtistId = album.ArtistId
+        };
+        return trackDTO;
     }
 
     private Exception KeyNotFoundException(string v)

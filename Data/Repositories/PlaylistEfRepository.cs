@@ -19,7 +19,7 @@ public class PlaylistEfRepository : IPlaylistEfRepository
 
     public async Task<Playlist?> GetByIdAsync(int id)
     {
-        return await _dbContext.Playlists.FindAsync(id);
+        return _dbContext.Playlists.Include(playlist => playlist.Tracks).FirstOrDefault(playlist => playlist.Id == id);
     }
 
     public async Task AddAsync(Playlist playlist)
@@ -43,5 +43,6 @@ public class PlaylistEfRepository : IPlaylistEfRepository
         await _dbContext.SaveChangesAsync();
         return true;
     }
+
 
 }

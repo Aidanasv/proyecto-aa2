@@ -33,7 +33,7 @@ public class UserService : IUserService
             BirthDate = userCreate.BirthDate,
             CreateDate = userCreate.CreateDate,
             LastLogin = userCreate.LastLogin,
-            TypeUserId = userCreate.TypeUserId
+            Role = userCreate.Role
         };
 
         await _userRepository.AddAsync(user);

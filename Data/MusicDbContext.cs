@@ -1,7 +1,7 @@
+namespace Data;
+
 using Microsoft.EntityFrameworkCore;
 using Models;
-
-namespace Data;
 
 public class MusicDbContext : DbContext
 {
@@ -12,5 +12,12 @@ public class MusicDbContext : DbContext
     public DbSet<Track> Tracks { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Playlist> Playlists { get; set; }
-    public DbSet<TypeUser> TypeUsers { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<User>().HasData(
+            new User { Id = 1, Username = "admin", Email = "admin@svalero.com", Password = "090801", Role = Role.Admin, Name = "Admin"}
+        );
+    }
+
 }
