@@ -15,8 +15,25 @@ public class MusicDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Solo configurar la cascada problemática, dejar que las DataAnnotations manejen el resto
+        modelBuilder.Entity<Track>()
+            .HasOne(t => t.Artist)
+            .WithMany()
+            .OnDelete(DeleteBehavior.NoAction);
+
+        // Datos de seeding con fechas fijas
         modelBuilder.Entity<User>().HasData(
-            new User { Id = 1, Username = "admin", Email = "admin@svalero.com", Password = "090801", Role = Role.Admin, Name = "Admin"}
+            new User { 
+                Id = 1, 
+                Username = "admin", 
+                Email = "admin@svalero.com", 
+                Password = "090801", 
+                Role = Role.Admin.ToString(), 
+                Name = "Admin",
+                BirthDate = new DateTime(1990, 1, 1),
+                CreateDate = new DateTime(2025, 1, 1),
+                LastLogin = new DateTime(2025, 1, 1)
+            }
         );
     }
 

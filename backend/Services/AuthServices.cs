@@ -8,7 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-
+using System.ComponentModel.DataAnnotations;
 
 public class AuthService : IAuthService
 {
@@ -31,11 +31,30 @@ public class AuthService : IAuthService
         return GenerateToken(user);
     }
 
-/*     public string Register(UserDtoIn userDtoIn)
+    public string Register(UserRegister userRegister)
     {
-        var user = _repository.AddUserFromCredentials(userDtoIn);
-        return GenerateToken(user);
-    } */
+        
+
+        var user = new User
+        {
+            Name = userRegister.Name,
+            Username = userRegister.Username,
+            Email = userRegister.Email,
+            Password = userRegister.Password,
+            BirthDate = userRegister.BirthDate,
+            Role = Role.Client
+        };
+
+        _repository.AddAsync(user);
+
+        var userToken = new UserToken
+        {
+            Id = user.Id,
+            Role = user.Role
+        };
+
+        return GenerateToken(userToken);
+    }
 
     public string GenerateToken(UserToken userToken)
     {

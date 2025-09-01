@@ -6,7 +6,9 @@ import { useNotificationStore } from '@/stores/useNotificationStore';
 import SongForm from '@/components/SongForm.vue';
 import type { Song, Track } from '@/types/songs';
 import { formatTime } from '@/utils/TimeFormat';
+import { formatDate } from '@/utils/FormatUtils';
 import { useAuthStore } from '@/stores/useAuthStore';
+import { buildApiUrl, API_ENDPOINTS } from '@/config/api';
 
 const songStore = useSongStore();
 const playlistStore = usePlaylistStore();
@@ -86,7 +88,7 @@ function onSongUpdate(song: Song | undefined) {
                 <v-card-title>{{ songStore.songs?.name }}</v-card-title>
                 <v-img :src="songStore.songs?.imagen" height="200" cover></v-img>
                 <v-card-text>
-                    <div>{{ songStore.songs?.releaseDate }}</div>
+                    <div>{{ formatDate(songStore.songs?.releaseDate ? new Date(songStore.songs.releaseDate) : '') }}</div>
                 </v-card-text>
             </v-card>
         </v-col>
@@ -122,7 +124,7 @@ function onSongUpdate(song: Song | undefined) {
                                 @click.stop="addToPlaylist(item.id)"
                                 :loading="isAddingTrack === item.id"
                             ></v-btn>
-                            <audio :src="`http://localhost:5053/tracks/audio/${item.id}`" controls></audio>
+                            <audio :src="`${buildApiUrl(API_ENDPOINTS.AUDIOSONGS)}/${item.id}`" controls></audio>
                         </div>
                     </template>
                 </v-list-item>

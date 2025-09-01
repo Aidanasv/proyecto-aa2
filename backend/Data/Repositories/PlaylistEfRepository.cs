@@ -44,9 +44,46 @@ public class PlaylistEfRepository : IPlaylistEfRepository
         return true;
     }
 
-    public async Task<List<Playlist>> GetPlaylistsByUser(int idUser)
+    public async Task<List<Playlist>> GetPlaylistsByUser(PlaylistDtoParameters playlistDtoParameters,int idUser)
     {
-        var playlist = await _dbContext.Playlists.Include(playlist => playlist.Tracks).Where(playlist => playlist.UserId == idUser && playlist.SoftDelete == false).ToListAsync();
+
+        var query = _dbContext.Playlists.Include(playlist => playlist.Tracks).Where(playlist => playlist.UserId == idUser && playlist.SoftDelete == false);
+
+
+        if (playlistDtoParameters.Name != null || playlistDtoParameters.Description != null)
+        {
+            query = query.Where(
+            playlist => (
+                (playlistDtoParameters.Name != null && playlist.Name.ToLower().Contains(playlistDtoParameters.Name.ToLower()))
+                 || (playlistDtoParameters.Description != null && playlist.Description.ToLower().Contains(playlistDtoParameters.Description.ToLower()))));
+
+
+        }
+        
+        IOrderedQueryable<Playlist>? orderedQuery = null;
+
+        if (playlistDtoParameters.NameOrder == true)
+        {
+            orderedQuery = query.OrderBy(playlist => playlist.Name);
+        }
+        else if (playlistDtoParameters.NameOrder == false)
+        {
+            orderedQuery = query.OrderByDescending(playlist => playlist.Name);
+        }
+
+        if (playlistDtoParameters.DescriptionOrder == true)
+        {
+            orderedQuery = orderedQuery == null
+                ? query.OrderBy(playlist => playlist.Description)
+                : orderedQuery.ThenBy(playlist => playlist.Description);
+        }
+        else if (playlistDtoParameters.DescriptionOrder == false)
+        {
+            orderedQuery = orderedQuery == null
+                ? query.OrderByDescending(playlist => playlist.Description)
+                : orderedQuery.ThenByDescending(playlist => playlist.Description);
+        }
+        var playlist = await (orderedQuery ?? query).ToListAsync();
         return playlist;
     }
 

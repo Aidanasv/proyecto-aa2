@@ -3,6 +3,7 @@ import { ref } from "vue";
 import axios from "axios";
 import type { AlbumSong, createSong, Song } from "@/types/songs";
 import { useAuthStore } from "./useAuthStore";
+import { buildApiUrl, API_ENDPOINTS } from '@/config/api';
 
 export const useSongStore = defineStore("songStore", () => {
 
@@ -16,7 +17,7 @@ export const useSongStore = defineStore("songStore", () => {
         error.value = null;
 
         try {
-            const response = await axios.get<AlbumSong>(`http://localhost:5053/albums/${id}/tracks`,)
+            const response = await axios.get<AlbumSong>(`${buildApiUrl(API_ENDPOINTS.ALBUMS)}/${id}/tracks`,)
             songs.value = response.data
         } catch (err: any) {
             error.value = err.message || "Error al obtener canciones";
@@ -30,7 +31,7 @@ export const useSongStore = defineStore("songStore", () => {
         error.value = null;
 
         try {
-            const response = await axios.post("http://localhost:5053/tracks",
+            const response = await axios.post(buildApiUrl(API_ENDPOINTS.TRACKS),
                 song, { headers: { authorization: `Bearer ${authStore.token}` } })
         }catch (err: any) {
             error.value = err.message || "Error al añadir canciones"
@@ -45,7 +46,7 @@ export const useSongStore = defineStore("songStore", () => {
         error.value = null;
 
         try{
-            const response = await axios.delete(`http://localhost:5053/tracks/${song.id}`,
+            const response = await axios.delete(`${buildApiUrl(API_ENDPOINTS.TRACKS)}/${song.id}`,
                  { headers: { authorization: `Bearer ${authStore.token}` } })
         } catch (err: any) {
             error.value = err.message || "Error al eliminar canción"
@@ -60,7 +61,7 @@ export const useSongStore = defineStore("songStore", () => {
         error.value = null;
 
         try {
-            const response = await axios.put(`http://localhost:5053/tracks/${song.id}`, song, { headers: { authorization: `Bearer ${authStore.token}` } })
+            const response = await axios.put(`${buildApiUrl(API_ENDPOINTS.TRACKS)}/${song.id}`, song, { headers: { authorization: `Bearer ${authStore.token}` } })
         }catch (err: any) {
             error.value = err.message || "Error al modificar canción"
         } finally {

@@ -3,6 +3,7 @@ import { ref } from "vue";
 import axios from "axios";
 import type { Artist, NewArtist } from "@/types/artists";
 import { useAuthStore } from "./useAuthStore";
+import { buildApiUrl, API_ENDPOINTS } from '@/config/api';
 
 export const useArtistsStore = defineStore("artistsStore", () => {
 
@@ -23,7 +24,7 @@ export const useArtistsStore = defineStore("artistsStore", () => {
         error.value = null;
 
         try {
-            let url = 'http://127.0.0.1:5053/artists';
+            let url = buildApiUrl(API_ENDPOINTS.ARTISTS);
             if (filters) {
                 const params = new URLSearchParams();
                 if (filters.name) params.append('Name', filters.name);
@@ -49,7 +50,7 @@ export const useArtistsStore = defineStore("artistsStore", () => {
         isLoading.value = true;
         error.value = null;
         try {
-            const response = await axios.post('http://localhost:5053/artists', artist,
+            const response = await axios.post(buildApiUrl(API_ENDPOINTS.ARTISTS), artist,
                 { headers: { authorization: `Bearer ${authStore.token}` } }
             );
             artists.value.push(response.data);
@@ -64,7 +65,7 @@ export const useArtistsStore = defineStore("artistsStore", () => {
         isLoading.value = true;
         error.value = null;
         try {
-            await axios.delete(`http://localhost:5053/artists/${artistId}`, {
+            await axios.delete(`${buildApiUrl(API_ENDPOINTS.ARTISTS)}/${artistId}`, {
                 headers: { authorization: `Bearer ${authStore.token}` }
             });
             artists.value = artists.value.filter(artist => artist.id !== artistId);
@@ -79,7 +80,7 @@ export const useArtistsStore = defineStore("artistsStore", () => {
         isLoading.value = true;
         error.value = null;
         try {
-            const response = await axios.put(`http://localhost:5053/artists/${artistId}`, artist, {
+            const response = await axios.put(`${buildApiUrl(API_ENDPOINTS.ARTISTS)}/${artistId}`, artist, {
                 headers: { authorization: `Bearer ${authStore.token}` }
             });
             const index = artists.value.findIndex(a => a.id === artistId);

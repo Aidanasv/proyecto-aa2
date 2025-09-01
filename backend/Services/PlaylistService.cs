@@ -139,9 +139,9 @@ public class PlaylistService : IPlaylistService
 
     }
 
-    public async Task<List<PlaylistDto>> GetPlaylistsByUser(int id)
+    public async Task<List<PlaylistDto>> GetPlaylistsByUser(PlaylistDtoParameters playlistDtoParameters, int id)
     {
-        var playlists = await _playlistRepository.GetPlaylistsByUser(id);
+        var playlists = await _playlistRepository.GetPlaylistsByUser(playlistDtoParameters, id);
         if (playlists == null)
         {
             throw KeyNotFoundException("Playlists no encontrada");

@@ -14,3 +14,11 @@ public class TrackDto
     public string Name { get; set; }
     public int Duration { get; set; }
 }
+
+public class PlaylistDtoParameters
+{
+    public string? Name { get; set; }
+    public bool? NameOrder { get; set; }
+    public string? Description { get; set; }
+    public bool? DescriptionOrder { get; set; }
+}

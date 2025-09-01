@@ -1,0 +1,53 @@
+version: '3.8'
+ 
+networks: #useful for connect API to DB by service name in appsettings (for example, "ServerDB": "Server=db;) 
+    backend:       
+
+volumes:
+    sqlserver-data:
+        driver: local
+
+services:
+      web:
+        container_name: webContainer
+        build:
+          context: .
+          dockerfile: frontend/Dockerfile
+        ports:
+            - 9000:80
+        depends_on:
+            - api
+        networks:
+            - backend
+      db:
+          container_name: sqlServerContainer
+          image: mcr.microsoft.com/mssql/server:2022-latest
+          environment:
+              SA_PASSWORD: "Admin1234!"
+              ACCEPT_EULA: "Y"
+          ports:
+              - 1433:1433
+          volumes:
+              - sqlserver-data:/var/opt/mssql
+          networks:
+              - backend
+          healthcheck:
+              test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'Admin1234!' -C -Q 'SELECT 1' || exit 1"]
+              interval: 3s
+              retries: 10
+              start_period: 10s
+              timeout: 3s
+
+      api:
+        #container_name: apiContainer
+        #image: apidb-dockerdemo:1.2
+        ports:
+            - 7818:8080   #never change internal port!!!
+        networks:
+            - backend
+        build:
+          context: .
+          dockerfile: backend/Dockerfile
+        depends_on:
+            db:
+                condition: service_healthy

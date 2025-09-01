@@ -13,6 +13,10 @@ function goToLogin() {
   router.push({ name: 'login' })
 }
 
+function goToRegister() {
+  router.push({ name: 'register' })
+}
+
 function logout() {
   authStore.logout()
   router.push({ name: 'login' })
@@ -37,10 +41,17 @@ const languages = [
       {{ t('logout')}}
     </v-btn>
 
-    <v-btn v-else @click="goToLogin">
-      <v-icon>mdi-login</v-icon>
-      {{ t('login')}}
-    </v-btn>
+    <template v-else>
+      <v-btn @click="goToRegister" class="mr-2">
+        <v-icon>mdi-account-plus</v-icon>
+        Registrarse
+      </v-btn>
+      
+      <v-btn @click="goToLogin">
+        <v-icon>mdi-login</v-icon>
+        {{ t('login')}}
+      </v-btn>
+    </template>
 
     <v-select v-model="locale" :items="languages" item-title="label" item-value="code" variant="outlined"
       density="compact" hide-details style="max-width: 80px" />

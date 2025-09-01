@@ -11,3 +11,10 @@ export interface NewPlaylist {
     name: string;
     description: string;
 }
+
+export interface PlaylistFilters {
+    name?: string;
+    nameOrder?: boolean | null;
+    description?: string;
+    descriptionOrder?: boolean | null;
+}

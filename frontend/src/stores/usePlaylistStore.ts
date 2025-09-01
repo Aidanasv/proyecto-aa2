@@ -1,8 +1,9 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import axios from "axios";
-import type { Playlist, NewPlaylist } from "@/types/playlist";
+import type { Playlist, NewPlaylist, PlaylistFilters } from "@/types/playlist";
 import { useAuthStore } from "./useAuthStore";
+import { buildApiUrl, API_ENDPOINTS } from '@/config/api';
 
 export const usePlaylistStore = defineStore("playlistStore", () => {
     const playlists = ref<Playlist[]>([]);
@@ -11,13 +12,14 @@ export const usePlaylistStore = defineStore("playlistStore", () => {
     const error = ref<string | null>(null);
     const authStore = useAuthStore();
 
-    async function fetchUserPlaylists(): Promise<void> {
+    async function fetchUserPlaylists(filters?: PlaylistFilters): Promise<void> {
         isLoading.value = true;
         error.value = null;
 
         try {
-            const response = await axios.get<Playlist[]>('http://localhost:5053/playlists/user', {
-                headers: { authorization: `Bearer ${authStore.token}` }
+            const response = await axios.get<Playlist[]>(`${buildApiUrl(API_ENDPOINTS.PLAYLISTS)}/user`, {
+                headers: { authorization: `Bearer ${authStore.token}` },
+                params: filters
             });
             playlists.value = response.data;
         } catch (err: any) {
@@ -32,7 +34,7 @@ export const usePlaylistStore = defineStore("playlistStore", () => {
         error.value = null;
 
         try {
-            const response = await axios.post('http://localhost:5053/playlists', playlist, {
+            const response = await axios.post(buildApiUrl(API_ENDPOINTS.PLAYLISTS), playlist, {
                 headers: { authorization: `Bearer ${authStore.token}` }
             });
             await fetchUserPlaylists();
@@ -49,7 +51,7 @@ export const usePlaylistStore = defineStore("playlistStore", () => {
         error.value = null;
 
         try {
-            const response = await axios.put(`http://localhost:5053/playlists/${id}`, playlist, {
+            const response = await axios.put(`${buildApiUrl(API_ENDPOINTS.PLAYLISTS)}/${id}`, playlist, {
                 headers: { authorization: `Bearer ${authStore.token}` }
             });
             await fetchUserPlaylists();
@@ -66,7 +68,7 @@ export const usePlaylistStore = defineStore("playlistStore", () => {
         error.value = null;
 
         try {
-            await axios.delete(`http://localhost:5053/playlists/${id}`, {
+            await axios.delete(`${buildApiUrl(API_ENDPOINTS.PLAYLISTS)}/${id}`, {
                 headers: { authorization: `Bearer ${authStore.token}` }
             });
             await fetchUserPlaylists();
@@ -83,7 +85,7 @@ export const usePlaylistStore = defineStore("playlistStore", () => {
         error.value = null;
 
         try {
-            await axios.post(`http://localhost:5053/playlists/${playlistId}/add/${trackId}`, {}, {
+            await axios.post(`${buildApiUrl(API_ENDPOINTS.PLAYLISTS)}/${playlistId}/add/${trackId}`, {}, {
                 headers: { authorization: `Bearer ${authStore.token}` }
             });
             // Actualizar la lista después de añadir la canción
@@ -101,7 +103,7 @@ export const usePlaylistStore = defineStore("playlistStore", () => {
         error.value = null;
 
         try {
-            await axios.delete(`http://localhost:5053/playlists/${playlistId}/remove/${trackId}`, {
+            await axios.delete(`${buildApiUrl(API_ENDPOINTS.PLAYLISTS)}/${playlistId}/remove/${trackId}`, {
                 headers: { authorization: `Bearer ${authStore.token}` }
             });
             // Actualizar la lista después de eliminar la canción

@@ -13,6 +13,7 @@ import SongsView from '../views/SongsView.vue'
 import HomeView from '@/views/HomeView.vue'
 import { useAuthStore } from '@/stores/useAuthStore'
 import LoginView from '@/views/LoginView.vue'
+import RegisterView from '@/views/RegisterView.vue'
 import PlaylistView from '../views/PlaylistView.vue'
 
 
@@ -32,7 +33,7 @@ const router = createRouter({
     {
       path: '/albums/:id',
       name: 'albums',
-      component: () => AlbumsView,
+      component: AlbumsView,
       props: true,
     },
     {
@@ -44,9 +45,13 @@ const router = createRouter({
     {
       path: '/songs/:id',
       name: 'songs',
-      component: () => SongsView,
+      component: SongsView,
       props: true,
-
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: RegisterView
     },
     { path: '/login', 
       name: 'login', 
