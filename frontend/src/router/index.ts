@@ -10,7 +10,6 @@ declare module 'vue-router' {
 import ArtistView from '../views/ArtistView.vue'
 import AlbumsView from '../views/AlbumsView.vue'
 import SongsView from '../views/SongsView.vue'
-import HomeView from '@/views/HomeView.vue'
 import { useAuthStore } from '@/stores/useAuthStore'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
@@ -22,11 +21,6 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView,
-    },
-    {
-      path: '/artists',
       name: 'artists',
       component: ArtistView,
     },
@@ -69,7 +63,7 @@ router.beforeEach((to, from, next) => {
     }
     
     if (to.meta.roles && auth.user?.role && !to.meta.roles.includes(auth.user.role)) {
-      next({ name: 'home' }) // Redirigir a home si no tiene el rol adecuado
+      next({ name: 'artist' }) // Redirigir a artist si no tiene el rol adecuado
       return
     }
   }

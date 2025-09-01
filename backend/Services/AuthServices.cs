@@ -9,6 +9,7 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography;
 
 public class AuthService : IAuthService
 {
@@ -23,24 +24,34 @@ public class AuthService : IAuthService
 
     public string Login(UserAuth userAuth)
     {
+        var salt = GenerateSalt();
+        var passwordHash = HashPassword(userAuth.Password, salt);
+        userAuth.Password = passwordHash;
+
         var user = _repository.GetUserFromCredentials(userAuth);
         if (user == null)
         {
             return "";
         }
-        return GenerateToken(user);
+
+        var userToken = new UserToken
+        {
+            Id = user.Id,
+            Role = user.Role
+        };
+        return GenerateToken(userToken);
     }
 
-    public string Register(UserRegister userRegister)
+    public string Register(UserRegisterPassword userRegister)
     {
-        
-
+        var salt = GenerateSalt();
+        var passwordHash = HashPassword(userRegister.Password, salt);
         var user = new User
         {
             Name = userRegister.Name,
             Username = userRegister.Username,
             Email = userRegister.Email,
-            Password = userRegister.Password,
+            Password = passwordHash,
             BirthDate = userRegister.BirthDate,
             Role = Role.Client
         };
@@ -54,6 +65,26 @@ public class AuthService : IAuthService
         };
 
         return GenerateToken(userToken);
+    }
+
+    public byte[] GenerateSalt()
+    {
+        return Encoding.UTF8.GetBytes("Admin1234");
+    }
+
+    public string HashPassword(string password, byte[] salt)
+    {
+        int keySize = 64;
+        int iterations = 1000;
+        HashAlgorithmName hashAlgorithm = HashAlgorithmName.SHA512;
+
+        var hash = Rfc2898DeriveBytes.Pbkdf2(Encoding.UTF8.GetBytes(password),
+                                             salt,
+                                             iterations,
+                                             hashAlgorithm,
+                                             keySize);
+
+        return Convert.ToHexString(hash);
     }
 
     public string GenerateToken(UserToken userToken)
@@ -77,23 +108,5 @@ public class AuthService : IAuthService
         var tokenString = tokenHandler.WriteToken(token);
         return tokenString;
     }
-/*     public bool HasAccessToResource(int requestedUserID, ClaimsPrincipal user)
-    {
-        var userIdClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-        if (userIdClaim is null || !int.TryParse(userIdClaim.Value, out int userId))
-        {
-            return false;
-        }
-        var isOwnResource = userId == requestedUserID;
-
-        var roleClaim = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role);
-        if (roleClaim != null) return false;
-        var isAdmin = roleClaim!.Value == Roles.Admin;
-
-        var hasAccess = isOwnResource || isAdmin;
-        return hasAccess;
-    }
-  */
-
 }
 

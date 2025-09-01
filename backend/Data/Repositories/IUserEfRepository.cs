@@ -10,5 +10,5 @@ public interface IUserEfRepository
     Task AddAsync(User user);
     Task UpdateAsync(User user);
     Task<bool> DeleteAsync(int id);
-    UserToken? GetUserFromCredentials(UserAuth user);
+    User? GetUserFromCredentials(UserAuth user);
 }

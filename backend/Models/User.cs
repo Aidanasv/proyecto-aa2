@@ -14,6 +14,11 @@ public class UserRegister : UserAuth
     public string Username { get; set; }
     public DateTime BirthDate { get; set; }
 }
+
+public class UserRegisterPassword : UserRegister
+{
+    public string PasswordValidate { get; set; }
+}
 public class UserCreate : UserRegister
 {
 

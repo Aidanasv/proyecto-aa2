@@ -32,7 +32,7 @@
                             ></v-text-field>
 
                             <v-text-field
-                                v-model="passwordConfirm"
+                                v-model="formData.passwordValidate"
                                 label="Confirmar Contraseña"
                                 prepend-inner-icon="mdi-lock-check"
                                 :type="showPassword ? 'text' : 'password'"
@@ -125,11 +125,11 @@ const isFormValid = ref(false);
 const isLoading = ref(false);
 const showPassword = ref(false);
 const dateMenu = ref(false);
-const passwordConfirm = ref('');
 
 const formData = ref({
     email: '',
     password: '',
+    passwordValidate: '',
     name: '',
     username: '',
     birthDate: new Date().toISOString().substr(0, 10)
@@ -149,7 +149,7 @@ const formattedDate = computed(() => {
 const register = async () => {
     if (!form.value?.validate()) return;
     
-    if (formData.value.password !== passwordConfirm.value) {
+    if (formData.value.password !== formData.value.passwordValidate) {
         notificationStore.showError('Las contraseñas no coinciden');
         return;
     }
@@ -161,7 +161,7 @@ const register = async () => {
             birthDate: new Date(formData.value.birthDate).toISOString()
         });
         notificationStore.showSuccess('Registro exitoso');
-        passwordConfirm.value = ''; // Reset password confirm
+        formData.value.passwordValidate = ''; // Reset password confirm
         router.push('/');
     } catch (error: any) {
         notificationStore.showError(error.message || 'Error al registrar usuario');
