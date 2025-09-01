@@ -121,10 +121,10 @@ public class PlaylistController : ControllerBase
     }
     [Authorize(Roles = Role.Client)]
     [HttpGet("user")]
-    public async Task<ActionResult<List<PlaylistDto>>> GetPlaylistsByUser()
+    public async Task<ActionResult<List<PlaylistDto>>> GetPlaylistsByUser([FromQuery] PlaylistDtoParameters playlistDtoParameters)
     {
         var currentUser = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        var playlist = await _playlistService.GetPlaylistsByUser(int.Parse(currentUser));
+        var playlist = await _playlistService.GetPlaylistsByUser(playlistDtoParameters,int.Parse(currentUser));
         if (playlist == null)
         {
             return NoContent();

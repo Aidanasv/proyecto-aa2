@@ -6,6 +6,7 @@ import ArtistForm from '@/components/ArtistForm.vue';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { useNotificationStore } from '@/stores/useNotificationStore';
 import type { Artist } from '@/types/artists';
+import { formatNumber } from '@/utils/FormatUtils';
 
 const artistsStore = useArtistsStore();
 const router = useRouter();
@@ -164,7 +165,7 @@ async function removeArtist() {
                     <v-card-title>{{ artist.name }}</v-card-title>
                     <v-card-subtitle class="pt-4">
                         <v-icon>mdi-account-group</v-icon>
-                        {{ artist.followers }} seguidores
+                        {{ formatNumber(artist.followers) }} seguidores
                     </v-card-subtitle>
 
                     <v-img :src="artist.imagen" color="surface-variant" height="200" cover></v-img>

@@ -4,7 +4,8 @@ import { useAlbumStore } from '@/stores/useAlbumsStore';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/useAuthStore';
 import AlbumForm from '@/components/AlbumForm.vue';
-
+import { formatDate } from '@/utils/FormatUtils';
+import { formatNumber } from '@/utils/FormatUtils';
 const albumsStore = useAlbumStore();
 const router = useRouter();
 const authStore = useAuthStore();
@@ -37,7 +38,7 @@ function showAddAlbumDialog() {
                         {{ albumsStore.artist.biography }}
                     </p>
                     <v-chip class="ma-2" variant="outlined">
-                        {{ albumsStore.artist?.followers || 0 }} seguidores
+                        {{ formatNumber(albumsStore.artist?.followers ?? 0) }} seguidores
                     </v-chip>
                 </v-card-text>
                 <v-card-actions class="justify-end">
@@ -61,7 +62,7 @@ function showAddAlbumDialog() {
                 <v-card-title>{{ album.name }}</v-card-title>
                 <v-img :src="album.imagen || 'https://via.placeholder.com/200'" height="200" cover></v-img>
                 <v-card-text>
-                    <div>{{ new Date(album.releaseDate).toLocaleDateString() }}</div>
+                    <div>{{ formatDate(new Date(album.releaseDate)) }}</div>
                 </v-card-text>
             </v-card>
         </v-col>

@@ -7,11 +7,16 @@ public class UserAuth
     public string Email { get; set; }
     public string Password { get; set; }
 }
-public class UserCreate : UserAuth
+
+public class UserRegister : UserAuth
 {
     public string Name { get; set; }
     public string Username { get; set; }
     public DateTime BirthDate { get; set; }
+}
+public class UserCreate : UserRegister
+{
+
     public DateTime CreateDate { get; set; }
     public DateTime LastLogin { get; set; }
     public string Role { get; set; }

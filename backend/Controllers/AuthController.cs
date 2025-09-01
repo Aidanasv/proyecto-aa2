@@ -15,7 +15,7 @@ public class AuthController : ControllerBase
     {
         _authService = authService;
     }
-    
+
     [HttpPost("Login")]
     public IActionResult Login(UserAuth userAuth)
     {
@@ -37,6 +37,26 @@ public class AuthController : ControllerBase
         }
     }
 
+    [HttpPost("Register")]
+    public IActionResult Register(UserRegister userRegister)
+    {
+           try
+        {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+
+            var token = _authService.Register(userRegister);
+            return Ok(token);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return Unauthorized(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest
+            ("Error generating the token: " + ex.Message);
+        }
+    }
 
 
 }

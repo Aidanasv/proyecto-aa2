@@ -14,8 +14,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var connectionString = builder.Configuration.GetConnectionString("ServerDB_dockernet");
 builder.Services.AddDbContext<MusicDbContext>(options =>
-    options.UseSqlite("Data Source=music.db")
+    options.UseSqlServer(connectionString)
 );
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -92,12 +93,21 @@ builder.Services.AddCors(options =>
 });
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// Aplicar migraciones automáticamente
+using (var scope = app.Services.CreateScope())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    var db = scope.ServiceProvider.GetRequiredService<MusicDbContext>();
+    db.Database.Migrate();
 }
+
+app.MapGet("/", () => "Health check OK - API is running");
+
+// Configure the HTTP request pipeline.
+/* if (app.Environment.IsDevelopment())
+{ */
+app.UseSwagger();
+app.UseSwaggerUI();
+//}
 
 app.UseCors(MyAllowSpecificOrigins);
 

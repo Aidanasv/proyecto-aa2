@@ -10,6 +10,6 @@ public interface IPlaylistEfRepository
     Task AddAsync(Playlist playlist);
     Task UpdateAsync(Playlist playlist);
     Task<bool> DeleteAsync(int id);
-    Task<List<Playlist>> GetPlaylistsByUser(int idUser);
+    Task<List<Playlist>> GetPlaylistsByUser(PlaylistDtoParameters playlistDtoParameters,int idUser);
 
 }

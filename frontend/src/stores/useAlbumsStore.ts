@@ -3,6 +3,7 @@ import { ref } from "vue";
 import axios from "axios";
 import type { Album, ArtistAlbum } from "@/types/albums";
 import { useAuthStore } from "./useAuthStore";
+import { buildApiUrl, API_ENDPOINTS } from '@/config/api';
 
 export const useAlbumStore = defineStore("albumStore", () => {
 
@@ -16,7 +17,7 @@ export const useAlbumStore = defineStore("albumStore", () => {
         error.value = null;
 
         try {
-            const response = await axios.get<ArtistAlbum>(`http://localhost:5053/artists/${id}/albums`)
+            const response = await axios.get<ArtistAlbum>(`${buildApiUrl(API_ENDPOINTS.ARTISTS)}/${id}/albums`)
             artist.value = response.data
         } catch (err: any) {
             error.value = err.message || "Error al obtener albumes"
@@ -30,7 +31,7 @@ export const useAlbumStore = defineStore("albumStore", () => {
         error.value = null;
         try {
             const response = await axios.post(
-                `http://localhost:5053/albums`, 
+                buildApiUrl(API_ENDPOINTS.ALBUMS), 
                 {
                     ...albumData,
                     releaseDate: new Date(albumData.releaseDate).toISOString(),

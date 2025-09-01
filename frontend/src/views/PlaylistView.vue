@@ -14,6 +14,29 @@
             </v-col>
         </v-row>
 
+        <!-- Filtros -->
+        <v-row class="mb-4">
+            <v-col cols="12">
+                <v-text-field
+                    v-model="searchFilter"
+                    label="Buscar en playlists"
+                    prepend-inner-icon="mdi-magnify"
+                    clearable
+                    @update:model-value="applyFilters"
+                    @clear="searchFilter = ''; applyFilters()"
+                >
+                    <template v-slot:append>
+                        <v-btn icon @click="toggleOrder">
+                            <v-icon>{{ 
+                                orderAsc === null ? 'mdi-sort-variant-remove' :
+                                orderAsc ? 'mdi-sort-alphabetical-ascending' : 'mdi-sort-alphabetical-descending' 
+                            }}</v-icon>
+                        </v-btn>
+                    </template>
+                </v-text-field>
+            </v-col>
+        </v-row>
+
         <!-- Loading indicator -->
         <v-row v-if="playlistStore.isLoading">
             <v-col cols="12" class="text-center">
@@ -90,7 +113,7 @@
                                     <div class="d-flex align-center gap-4">
                                         <!-- Reproductor de audio -->
                                         <audio 
-                                            :src="`http://localhost:5053/tracks/audio/${track.id}`" 
+                                            :src="`${buildApiUrl(API_ENDPOINTS.AUDIOSONGS)}/${track.id}`" 
                                             controls
                                             class="audio-player"
                                         ></audio>
@@ -182,10 +205,16 @@ import PlaylistForm from '@/components/PlaylistForm.vue';
 import { formatTime } from '@/utils/TimeFormat';
 import type { Playlist } from '@/types/playlist';
 import type { Track } from '@/types/songs';
+import { buildApiUrl, API_ENDPOINTS } from '@/config/api';
+
 
 const playlistStore = usePlaylistStore();
 const authStore = useAuthStore();
 const notificationStore = useNotificationStore();
+
+// Variables para los filtros
+const searchFilter = ref('');
+const orderAsc = ref<boolean | null>(null);
 
 const showDialog = ref(false);
 const showConfirmDialog = ref(false);
@@ -194,9 +223,28 @@ const selectedPlaylist = ref<Playlist | null>(null);
 const playlistToDelete = ref<number | null>(null);
 const selectedPlaylistForTracks = ref<number | null>(null);
 
+// Funciones para los filtros
+const applyFilters = async () => {
+    if (authStore.isAuthenticated) {
+        await playlistStore.fetchUserPlaylists({
+            name: searchFilter.value || undefined,
+            nameOrder: orderAsc.value === undefined ? null : orderAsc.value,
+            description: searchFilter.value || undefined,
+            descriptionOrder: orderAsc.value === undefined ? null : orderAsc.value
+        });
+    }
+};
+
+const toggleOrder = () => {
+    if (orderAsc.value === null) orderAsc.value = true;
+    else if (orderAsc.value === true) orderAsc.value = false;
+    else orderAsc.value = null;
+    applyFilters();
+};
+
 onMounted(async () => {
     if (authStore.isAuthenticated) {
-        await playlistStore.fetchUserPlaylists();
+        await applyFilters();
     }
 });
 

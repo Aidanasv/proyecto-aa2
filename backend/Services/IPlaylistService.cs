@@ -11,5 +11,5 @@ public interface IPlaylistService
     Task DeleteAsync(int id);
     Task<PlaylistDto> AddTrackToPlaylist(int id, int idTrack);
     Task<PlaylistDto> DeleteTrackToPlaylist(int id, int idTrack);
-    Task<List<PlaylistDto>> GetPlaylistsByUser(int id);
+    Task<List<PlaylistDto>> GetPlaylistsByUser(PlaylistDtoParameters playlistDtoParameters, int id);
 }
