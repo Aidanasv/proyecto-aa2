@@ -24,6 +24,11 @@ public class AuthController : ControllerBase
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
             var token = _authService.Login(userAuth);
+            if (token == "")
+            {
+                return BadRequest
+                ("Usuario o clave incorrecta");
+            }
             return Ok(token);
         }
         catch (KeyNotFoundException ex)
@@ -38,12 +43,17 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("Register")]
-    public IActionResult Register(UserRegister userRegister)
+    public IActionResult Register(UserRegisterPassword userRegister)
     {
-           try
+        try
         {
             if (!ModelState.IsValid) { return BadRequest(ModelState); }
 
+            if (userRegister.Password != userRegister.PasswordValidate)
+            {
+                return BadRequest
+                ("Las contraseñas deben coincidir");
+            }
             var token = _authService.Register(userRegister);
             return Ok(token);
         }

@@ -44,16 +44,12 @@ public class UserEfRepository : IUserEfRepository
         return true;
     }
 
-    public UserToken? GetUserFromCredentials(UserAuth userAuth)
+    public User? GetUserFromCredentials(UserAuth userAuth)
     {
         var user = _dbContext.Users.FirstOrDefault(userDb => userDb.Email == userAuth.Email && userDb.Password == userAuth.Password);
 
-        var userToken = new UserToken
-        {
-            Id = user.Id,
-            Role = user.Role
-        };
-        return userToken;
+        
+        return user;
     }
 
 }

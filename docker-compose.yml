@@ -1,10 +1,12 @@
 version: '3.8'
  
-networks: #useful for connect API to DB by service name in appsettings (for example, "ServerDB": "Server=db;) 
+networks:
     backend:       
 
 volumes:
     sqlserver-data:
+        driver: local
+    app-data:
         driver: local
 
 services:
@@ -26,7 +28,7 @@ services:
               SA_PASSWORD: "Admin1234!"
               ACCEPT_EULA: "Y"
           ports:
-              - 1433:1433
+              - 8187:1433
           volumes:
               - sqlserver-data:/var/opt/mssql
           networks:
@@ -39,10 +41,8 @@ services:
               timeout: 3s
 
       api:
-        #container_name: apiContainer
-        #image: apidb-dockerdemo:1.2
         ports:
-            - 7818:8080   #never change internal port!!!
+            - 7818:8080
         networks:
             - backend
         build:
@@ -51,3 +51,7 @@ services:
         depends_on:
             db:
                 condition: service_healthy
+        environment:
+            - DATA_PATH=/app/data
+        volumes:
+            - app-data:/app/data

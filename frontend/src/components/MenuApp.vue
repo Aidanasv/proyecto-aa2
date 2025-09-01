@@ -3,7 +3,6 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { usePlaylistStore } from '@/stores/usePlaylistStore'
 import { useAuthStore } from '@/stores/useAuthStore'
-import { storeToRefs } from 'pinia'
 import { ref, onMounted, watch } from 'vue'
 
 const { t } = useI18n()
@@ -33,11 +32,6 @@ watch(selectedPlaylistId, (newId) => {
 
 <template>
   <div class="d-flex align-center flex-grow-1" style="gap: 16px;">
-    <v-btn @click="goTo('home')">
-      <v-icon>mdi-home</v-icon>
-      {{ t('home') }}
-    </v-btn>
-
     <v-btn @click="goTo('artists')">
       <v-icon>mdi-account-music</v-icon>
       {{ t('artists') }}
