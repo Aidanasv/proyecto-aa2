@@ -1,0 +1,57 @@
+version: '3.8'
+ 
+networks:
+    backend:       
+
+volumes:
+    sqlserver-data:
+        driver: local
+    app-data:
+        driver: local
+
+services:
+      web:
+        container_name: webContainer
+        build:
+          context: .
+          dockerfile: frontend/Dockerfile
+        ports:
+            - 9000:80
+        depends_on:
+            - api
+        networks:
+            - backend
+      db:
+          container_name: sqlServerContainer
+          image: mcr.microsoft.com/mssql/server:2022-latest
+          environment:
+              SA_PASSWORD: "Admin1234!"
+              ACCEPT_EULA: "Y"
+          ports:
+              - 8187:1433
+          volumes:
+              - sqlserver-data:/var/opt/mssql
+          networks:
+              - backend
+          healthcheck:
+              test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'Admin1234!' -C -Q 'SELECT 1' || exit 1"]
+              interval: 3s
+              retries: 10
+              start_period: 10s
+              timeout: 3s
+
+      api:
+        ports:
+            - 7818:8080
+        networks:
+            - backend
+        build:
+          context: .
+          dockerfile: backend/Dockerfile
+        depends_on:
+            db:
+                condition: service_healthy
+        environment:
+            - DATA_PATH=/app/data
+        volumes:
+            - app-data:/app/data
