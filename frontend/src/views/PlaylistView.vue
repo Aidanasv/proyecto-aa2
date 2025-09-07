@@ -116,6 +116,7 @@
                                             :src="`${buildApiUrl(API_ENDPOINTS.AUDIOSONGS)}/${track.id}`" 
                                             controls
                                             class="audio-player"
+                                            @play="handlePlayInPlaylist(track.id)"
                                         ></audio>
 
                                         <!-- Botón eliminar -->
@@ -199,6 +200,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { usePlaylistStore } from '@/stores/usePlaylistStore';
+import { useSongStore } from '@/stores/useSongsStore';
 import { useAuthStore } from '@/stores/useAuthStore';
 import { useNotificationStore } from '@/stores/useNotificationStore';
 import PlaylistForm from '@/components/PlaylistForm.vue';
@@ -209,6 +211,7 @@ import { buildApiUrl, API_ENDPOINTS } from '@/config/api';
 
 
 const playlistStore = usePlaylistStore();
+const songStore = useSongStore();
 const authStore = useAuthStore();
 const notificationStore = useNotificationStore();
 
@@ -311,6 +314,14 @@ function showAddTracksToPlaylist(playlistId: number) {
 function formatTotalDuration(tracks: Track[]): string {
     const totalSeconds = tracks.reduce((total, track) => total + track.duration, 0);
     return formatTime(totalSeconds);
+}
+
+async function handlePlayInPlaylist(trackId: number) {
+    try {
+        await songStore.updatePlays(trackId);
+    } catch (error) {
+        console.error('Error al incrementar reproducciones:', error);
+    }
 }
 </script>
 

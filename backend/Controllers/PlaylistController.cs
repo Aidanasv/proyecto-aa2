@@ -18,14 +18,23 @@ public class PlaylistController : ControllerBase
         _playlistService = service;
     }
 
-    
+    //Obtener playlists
     [HttpGet]
-    public async Task<ActionResult<List<Playlist>>> GetPlaylists()
+    public async Task<ActionResult<List<PlaylistRead>>> GetPlaylists()
     {
         var playlists = await _playlistService.GetAllAsync();
-        return Ok(playlists);
+        var playlistsRead = playlists.Select(playlist => new PlaylistRead
+        {
+            Name = playlist.Name,
+            Description = playlist.Description,
+            SoftDelete = playlist.SoftDelete,
+            Id = playlist.Id
+        });
+
+        return Ok(playlistsRead);
     }
 
+    //Obtener playlist por id
     [HttpGet("{id}")]
     public async Task<ActionResult<PlaylistDto>> GetPlaylistById(int id)
     {
@@ -37,6 +46,7 @@ public class PlaylistController : ControllerBase
         return Ok(playlist);
     }
 
+    //Crear playlist - Usuario verificado
     [Authorize(Roles = Role.Client)]
     [HttpPost]
     public async Task<ActionResult<PlaylistRead>> CreatePlaylist(PlaylistCreate playlist)
@@ -64,6 +74,7 @@ public class PlaylistController : ControllerBase
 
     }
 
+    //Modificar playlist - Usuario verificado
     [Authorize(Roles = Role.Client)]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdatePlaylist(int id, PlaylistCreate updatedPlaylist)
@@ -75,7 +86,15 @@ public class PlaylistController : ControllerBase
                 return BadRequest(ModelState);
             }
             updatedPlaylist = await _playlistService.UpdateAsync(updatedPlaylist, id);
-            return Ok();
+
+            var playlistRead = new PlaylistRead
+            {
+                Name = updatedPlaylist.Name,
+                Description = updatedPlaylist.Description,
+                SoftDelete = updatedPlaylist.SoftDelete,
+                Id = id
+            };
+            return Ok(updatedPlaylist);
         }
         catch (Exception ex)
         {
@@ -83,6 +102,7 @@ public class PlaylistController : ControllerBase
         }
     }
 
+    //Eliminar playlist - Usuario verificado
     [Authorize(Roles = Role.Client)]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePlaylist(int id)
@@ -90,10 +110,10 @@ public class PlaylistController : ControllerBase
         var playlist = await _playlistService.GetByIdAsync(id);
         if (playlist == null)
         {
-            return NotFound();
+            return NotFound(new { message = "Error al eliminar album" });
         }
         await _playlistService.DeleteAsync(id);
-        return Ok();
+        return Ok(id);
     }
 
     [Authorize(Roles = Role.Client)]
@@ -103,11 +123,12 @@ public class PlaylistController : ControllerBase
         var playlist = await _playlistService.AddTrackToPlaylist(id, idTrack);
         if (playlist == null)
         {
-            return NotFound();
+            return NotFound(new { message = "Error al añadir canción a la playlist" });
         }
         return Ok(playlist);
     }
 
+    //Eliminar canción de playlist - Usuario verificado
     [Authorize(Roles = Role.Client)]
     [HttpDelete("{id}/remove/{idTrack}")]
     public async Task<IActionResult> DeleteTrackToPlaylist(int id, int idTrack)
@@ -115,19 +136,21 @@ public class PlaylistController : ControllerBase
         var playlist = await _playlistService.DeleteTrackToPlaylist(id, idTrack);
         if (playlist == null)
         {
-            return NotFound();
+            return NotFound(new { message = "Error al eliminar la canción de la playlist" });
         }
         return Ok(playlist);
     }
+
+    //Obtener playlists de usuarios
     [Authorize(Roles = Role.Client)]
     [HttpGet("user")]
     public async Task<ActionResult<List<PlaylistDto>>> GetPlaylistsByUser([FromQuery] PlaylistDtoParameters playlistDtoParameters)
     {
         var currentUser = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        var playlist = await _playlistService.GetPlaylistsByUser(playlistDtoParameters,int.Parse(currentUser));
+        var playlist = await _playlistService.GetPlaylistsByUser(playlistDtoParameters, int.Parse(currentUser));
         if (playlist == null)
         {
-            return NoContent();
+            return NotFound(new { message = "No se encontraron playlist para el usuario" });
         }
         return Ok(playlist);
     }

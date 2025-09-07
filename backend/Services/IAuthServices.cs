@@ -4,7 +4,7 @@ using Models;
 public interface IAuthService
 {
     public string Login(UserAuth user);
-    public string Register(UserRegisterPassword user);
+    public Task<string> Register(UserRegisterPassword user, string role);
     public string GenerateToken(UserToken userToken);
 
     
