@@ -1,0 +1,1156 @@
+{
+	"info": {
+		"_postman_id": "2e47090a-bb2c-45d9-9887-e7f24f21c8e3",
+		"name": "MyAPI",
+		"description": "Colección generada desde OpenAPI para probar la API de música.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47991759",
+		"_collection_link": "https://a27818-333995.postman.co/workspace/Aidana-Paola-Farfan-Rosas's-Wor~884aa27a-b079-479b-8542-03d075e4e11c/collection/47991759-2e47090a-bb2c-45d9-9887-e7f24f21c8e3?action=share&source=collection_link&creator=47991759"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@svalero.com\",\n  \"password\": \"090801\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/Login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"Login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"client@svalero.com\",\n  \"password\": \"090801\",\n  \"passwordValidate\": \"090801\",\n  \"name\": \"Client\",\n  \"username\": \"client\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/Register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"Register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register Admin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6ImFkbWluIiwibmJmIjoxNzU3MjgxNTAwLCJleHAiOjE3NTc4ODYzMDAsImlhdCI6MTc1NzI4MTUwMCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTA1MyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMifQ.RXHXmeherhf95_yyzEcAIhACwfrZCETEh_vmfMC0-cI"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin1@svalero.com\",\n  \"password\": \"090801\",\n  \"name\": \"Admin 1\",\n  \"username\": \"admin1\",\n  \"birthDate\": \"2025-09-07T21:46:36.661Z\",\n  \"passwordValidate\": \"090801\"\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:7818/auth/Register/Admin",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"auth",
+								"Register",
+								"Admin"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Albums",
+			"item": [
+				{
+					"name": "Get All Albums",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/albums",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"albums"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Album",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Malcriado\",\n  \"artistId\": 1,\n  \"releaseDate\": \"2025-01-01T00:00:00\",\n  \"duration\": 0,\n  \"imagen\": \"https://lassomusica.com/wp-content/uploads/elementor/thumbs/Captura-de-pantalla-2025-05-20-a-las-19.21.05-fotor-20250520194423-r644ere4sz5sgbe12umbigsbwnty0h6xmtefwamnna.jpg\",\n  \"softDelete\": false\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/albums",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"albums"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Album By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6ImFkbWluIiwibmJmIjoxNzU3MjgxNTAwLCJleHAiOjE3NTc4ODYzMDAsImlhdCI6MTc1NzI4MTUwMCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTA1MyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMifQ.RXHXmeherhf95_yyzEcAIhACwfrZCETEh_vmfMC0-cI"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:7818/albums/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"albums",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Album",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6ImFkbWluIiwibmJmIjoxNzU3MjgxNTAwLCJleHAiOjE3NTc4ODYzMDAsImlhdCI6MTc1NzI4MTUwMCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTA1MyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMifQ.RXHXmeherhf95_yyzEcAIhACwfrZCETEh_vmfMC0-cI"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Malcriado\",\n  \"artistId\": 1,\n  \"releaseDate\": \"2025-08-07T22:03:56.513Z\",\n  \"duration\": 0,\n  \"imagen\": \"https://lassomusica.com/wp-content/uploads/elementor/thumbs/Captura-de-pantalla-2025-05-20-a-las-19.21.05-fotor-20250520194423-r644ere4sz5sgbe12umbigsbwnty0h6xmtefwamnna.jpg\",\n  \"softDelete\": false\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:7818/albums/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"albums",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Album",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6ImFkbWluIiwibmJmIjoxNzU3MjgxNTAwLCJleHAiOjE3NTc4ODYzMDAsImlhdCI6MTc1NzI4MTUwMCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTA1MyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMifQ.RXHXmeherhf95_yyzEcAIhACwfrZCETEh_vmfMC0-cI"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:7818/albums/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"albums",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Tracks By Album",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6ImFkbWluIiwibmJmIjoxNzU3MjgxNTAwLCJleHAiOjE3NTc4ODYzMDAsImlhdCI6MTc1NzI4MTUwMCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTA1MyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMifQ.RXHXmeherhf95_yyzEcAIhACwfrZCETEh_vmfMC0-cI"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:7818/albums/1/tracks",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"albums",
+								"1",
+								"tracks"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Artists",
+			"item": [
+				{
+					"name": "Get All Artists",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI0Iiwicm9sZSI6ImNsaWVudCIsIm5iZiI6MTc1NzI4MzUxNCwiZXhwIjoxNzU3ODg4MzE0LCJpYXQiOjE3NTcyODM1MTQsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDUzIn0.CtKUWLtSVAixlDds41BfuPvfalMv-aDnEyZU-hnzxD0"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:7818/artists?Name=a&NameOrder=true&Followers=5&FollowersOrder=true",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"artists"
+							],
+							"query": [
+								{
+									"key": "Name",
+									"value": "a"
+								},
+								{
+									"key": "NameOrder",
+									"value": "true"
+								},
+								{
+									"key": "Followers",
+									"value": "5"
+								},
+								{
+									"key": "FollowersOrder",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Artist",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Lasso\",\n  \"followers\": 25000,\n  \"biography\": \"Andrés Vicente Lazo Uslar, más conocido por su nombre artístico Lasso, es un cantante, actor y compositor venezolano.\",\n  \"createDate\": \"2025-01-01T00:00:00\",\n  \"imagen\": \"https://yt3.googleusercontent.com/aSNjzv2dzcDcWWAqmaY82IQ4dTQxhj8wUQKZ0G9hmp2TF5YrKTR9-YoXnwGZfKIJc-y6S2lz7g=s900-c-k-c0x00ffffff-no-rj\",\n  \"softDelete\": false\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/artists",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"artists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Artist By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6ImFkbWluIiwibmJmIjoxNzU3MjgxNTAwLCJleHAiOjE3NTc4ODYzMDAsImlhdCI6MTc1NzI4MTUwMCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTA1MyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMifQ.RXHXmeherhf95_yyzEcAIhACwfrZCETEh_vmfMC0-cI"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:7818/artists/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"artists",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Artist",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6ImFkbWluIiwibmJmIjoxNzU3MjgxNTAwLCJleHAiOjE3NTc4ODYzMDAsImlhdCI6MTc1NzI4MTUwMCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTA1MyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMifQ.RXHXmeherhf95_yyzEcAIhACwfrZCETEh_vmfMC0-cI"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Lasso\",\n  \"followers\": 55000,\n  \"biography\": \"Andrés Vicente Lazo Uslar, más conocido por su nombre artístico Lasso, es un cantante, actor y compositor venezolano.\",\n  \"createDate\": \"2025-09-07T21:54:39.354Z\",\n  \"imagen\": \"https://yt3.googleusercontent.com/aSNjzv2dzcDcWWAqmaY82IQ4dTQxhj8wUQKZ0G9hmp2TF5YrKTR9-YoXnwGZfKIJc-y6S2lz7g=s900-c-k-c0x00ffffff-no-rj\",\n  \"softDelete\": false\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:7818/artists/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"artists",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Artist",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6ImFkbWluIiwibmJmIjoxNzU3MjgxNTAwLCJleHAiOjE3NTc4ODYzMDAsImlhdCI6MTc1NzI4MTUwMCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTA1MyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMifQ.RXHXmeherhf95_yyzEcAIhACwfrZCETEh_vmfMC0-cI"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:7818/artists/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"artists",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Albums By Artist",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6ImFkbWluIiwibmJmIjoxNzU3MjgxNTAwLCJleHAiOjE3NTc4ODYzMDAsImlhdCI6MTc1NzI4MTUwMCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTA1MyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMifQ.RXHXmeherhf95_yyzEcAIhACwfrZCETEh_vmfMC0-cI"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:7818/artists/1/albums",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"artists",
+								"1",
+								"albums"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tracks",
+			"item": [
+				{
+					"name": "Get All Tracks",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/tracks",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tracks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Track",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Fetiche\",\n  \"artistId\": 1,\n  \"albumId\": 1,\n  \"duration\": 200,\n  \"releaseDate\": \"2025-01-01T00:00:00\",\n  \"plays\": 0,\n  \"softDelete\": false\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/tracks",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"tracks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Track By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6ImFkbWluIiwibmJmIjoxNzU3MjgxNTAwLCJleHAiOjE3NTc4ODYzMDAsImlhdCI6MTc1NzI4MTUwMCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTA1MyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMifQ.RXHXmeherhf95_yyzEcAIhACwfrZCETEh_vmfMC0-cI"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:7818/tracks/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"tracks",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Track",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6ImFkbWluIiwibmJmIjoxNzU3MjgxNTAwLCJleHAiOjE3NTc4ODYzMDAsImlhdCI6MTc1NzI4MTUwMCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTA1MyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMifQ.RXHXmeherhf95_yyzEcAIhACwfrZCETEh_vmfMC0-cI"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Fetiche\",\n  \"artistId\": 1,\n  \"albumId\": 1,\n  \"duration\": 120,\n  \"releaseDate\": \"2025-09-07T22:09:03.968Z\",\n  \"plays\": 0,\n  \"softDelete\": false\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:7818/tracks/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"tracks",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Audio",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6ImFkbWluIiwibmJmIjoxNzU3MjgxNTAwLCJleHAiOjE3NTc4ODYzMDAsImlhdCI6MTc1NzI4MTUwMCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTA1MyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMifQ.RXHXmeherhf95_yyzEcAIhACwfrZCETEh_vmfMC0-cI"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:7818/tracks/audio/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"tracks",
+								"audio",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Increment plays",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6ImFkbWluIiwibmJmIjoxNzU3MjgxNTAwLCJleHAiOjE3NTc4ODYzMDAsImlhdCI6MTc1NzI4MTUwMCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTA1MyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMifQ.RXHXmeherhf95_yyzEcAIhACwfrZCETEh_vmfMC0-cI"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:7818/tracks/audio/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"tracks",
+								"audio",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6ImFkbWluIiwibmJmIjoxNzU3MjgxNTAwLCJleHAiOjE3NTc4ODYzMDAsImlhdCI6MTc1NzI4MTUwMCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTA1MyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMifQ.RXHXmeherhf95_yyzEcAIhACwfrZCETEh_vmfMC0-cI"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:7818/users",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6ImFkbWluIiwibmJmIjoxNzU3MjgxNTAwLCJleHAiOjE3NTc4ODYzMDAsImlhdCI6MTc1NzI4MTUwMCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTA1MyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMifQ.RXHXmeherhf95_yyzEcAIhACwfrZCETEh_vmfMC0-cI"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:7818/users/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6ImFkbWluIiwibmJmIjoxNzU3MjgxNTAwLCJleHAiOjE3NTc4ODYzMDAsImlhdCI6MTc1NzI4MTUwMCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTA1MyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMifQ.RXHXmeherhf95_yyzEcAIhACwfrZCETEh_vmfMC0-cI"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:7818/users/3",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"users",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Playlist",
+			"item": [
+				{
+					"name": "Create Playlist",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI0Iiwicm9sZSI6ImNsaWVudCIsIm5iZiI6MTc1NzI4MzUxNCwiZXhwIjoxNzU3ODg4MzE0LCJpYXQiOjE3NTcyODM1MTQsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDUzIn0.CtKUWLtSVAixlDds41BfuPvfalMv-aDnEyZU-hnzxD0"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Mi Playlist\",\n  \"description\": \"Mis favoritas :)\",\n  \"softDelete\": false\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:7818/playlists",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"playlists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Playlist",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6ImFkbWluIiwibmJmIjoxNzU3MjgxNTAwLCJleHAiOjE3NTc4ODYzMDAsImlhdCI6MTc1NzI4MTUwMCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTA1MyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMifQ.RXHXmeherhf95_yyzEcAIhACwfrZCETEh_vmfMC0-cI"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:7818/playlists",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"playlists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Playlist By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI0Iiwicm9sZSI6ImNsaWVudCIsIm5iZiI6MTc1NzI4MzUxNCwiZXhwIjoxNzU3ODg4MzE0LCJpYXQiOjE3NTcyODM1MTQsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDUzIn0.CtKUWLtSVAixlDds41BfuPvfalMv-aDnEyZU-hnzxD0"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:7818/playlists/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"playlists",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Playlist",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI0Iiwicm9sZSI6ImNsaWVudCIsIm5iZiI6MTc1NzI4MzUxNCwiZXhwIjoxNzU3ODg4MzE0LCJpYXQiOjE3NTcyODM1MTQsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDUzIn0.CtKUWLtSVAixlDds41BfuPvfalMv-aDnEyZU-hnzxD0"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"softDelete\": true\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:7818/playlists/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"playlists",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Playlist",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI0Iiwicm9sZSI6ImNsaWVudCIsIm5iZiI6MTc1NzI4MzUxNCwiZXhwIjoxNzU3ODg4MzE0LCJpYXQiOjE3NTcyODM1MTQsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDUzIn0.CtKUWLtSVAixlDds41BfuPvfalMv-aDnEyZU-hnzxD0"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:7818/playlists/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"playlists",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Track to Playlist",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI0Iiwicm9sZSI6ImNsaWVudCIsIm5iZiI6MTc1NzI4MzUxNCwiZXhwIjoxNzU3ODg4MzE0LCJpYXQiOjE3NTcyODM1MTQsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDUzIn0.CtKUWLtSVAixlDds41BfuPvfalMv-aDnEyZU-hnzxD0"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:7818/playlists/1/add/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"playlists",
+								"1",
+								"add",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Track to Playlist",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI0Iiwicm9sZSI6ImNsaWVudCIsIm5iZiI6MTc1NzI4MzUxNCwiZXhwIjoxNzU3ODg4MzE0LCJpYXQiOjE3NTcyODM1MTQsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDUzIn0.CtKUWLtSVAixlDds41BfuPvfalMv-aDnEyZU-hnzxD0"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:7818/playlists/1/remove/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"playlists",
+								"1",
+								"remove",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Playlists By User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "text/plain"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiI0Iiwicm9sZSI6ImNsaWVudCIsIm5iZiI6MTc1NzI4MzUxNCwiZXhwIjoxNzU3ODg4MzE0LCJpYXQiOjE3NTcyODM1MTQsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDUzIn0.CtKUWLtSVAixlDds41BfuPvfalMv-aDnEyZU-hnzxD0"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:7818/playlists/user?Name=a&NameOrder=true&Description=a&DescriptionOrder=true",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7818",
+							"path": [
+								"playlists",
+								"user"
+							],
+							"query": [
+								{
+									"key": "Name",
+									"value": "a"
+								},
+								{
+									"key": "NameOrder",
+									"value": "true"
+								},
+								{
+									"key": "Description",
+									"value": "a"
+								},
+								{
+									"key": "DescriptionOrder",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:7818"
+		},
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIxIiwicm9sZSI6ImFkbWluIiwibmJmIjoxNzU3MjgxNTAwLCJleHAiOjE3NTc4ODYzMDAsImlhdCI6MTc1NzI4MTUwMCwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTA1MyIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwNTMifQ.RXHXmeherhf95_yyzEcAIhACwfrZCETEh_vmfMC0-cI"
+		}
+	]
+}
