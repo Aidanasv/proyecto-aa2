@@ -79,6 +79,14 @@ function addNewSong() {
 function onSongUpdate(song: Song | undefined) {
     selectSong.value = song;
 }
+
+async function handlePlay(trackId: number) {
+    try {
+        await songStore.updatePlays(trackId);
+    } catch (error) {
+        console.error('Error al incrementar reproducciones:', error);
+    }
+}
 </script>
 
 <template>
@@ -124,7 +132,11 @@ function onSongUpdate(song: Song | undefined) {
                                 @click.stop="addToPlaylist(item.id)"
                                 :loading="isAddingTrack === item.id"
                             ></v-btn>
-                            <audio :src="`${buildApiUrl(API_ENDPOINTS.AUDIOSONGS)}/${item.id}`" controls></audio>
+                            <audio 
+                                :src="`${buildApiUrl(API_ENDPOINTS.AUDIOSONGS)}/${item.id}`" 
+                                controls
+                                @play="handlePlay(item.id)"
+                            ></audio>
                         </div>
                     </template>
                 </v-list-item>

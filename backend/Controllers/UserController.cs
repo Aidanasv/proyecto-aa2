@@ -16,36 +16,50 @@ public class UserController : ControllerBase
         _userService = service;
     }
 
+    //Obtener usuarios
     [HttpGet]
-    public async Task<ActionResult<List<User>>> GetUsers()
+    public async Task<ActionResult<List<UserRead>>> GetUsers()
     {
         var users = await _userService.GetAllAsync();
-        return Ok(users);
+        var usersRead = users.Select(user => new UserRead
+        {
+            Email = user.Email,
+            Password = user.Password,
+            Name = user.Name,
+            Username = user.Username,
+            BirthDate = user.BirthDate,
+            CreateDate = user.CreateDate,
+            LastLogin = user.LastLogin,
+            Role = user.Role,
+            Id = user.Id
+        });
+        return Ok(usersRead);
     }
 
+    //Obtener usuario por id
     [HttpGet("{id}")]
     public async Task<ActionResult<User>> GetUserById(int id)
     {
         var user = await _userService.GetByIdAsync(id);
         if (user == null)
         {
-            return NoContent();
+            return NotFound(new { message = "No se encontró el usuario" });
         }
-        return Ok(user);
-    }
 
-    [HttpPost]
-    public async Task<ActionResult<User>> CreateUser(User user)
-    {
-        await _userService.AddAsync(user);
-        return CreatedAtAction(nameof(GetUsers), new { id = user.Id }, user);
-    }
+        var userRead = new UserRead
+        {
+            Email = user.Email,
+            Password = user.Password,
+            Name = user.Name,
+            Username = user.Username,
+            BirthDate = user.BirthDate,
+            CreateDate = user.CreateDate,
+            LastLogin = user.LastLogin,
+            Role = user.Role,
+            Id = user.Id
+        };
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateUser(int id, User updatedUser)
-    {
-        await _userService.UpdateAsync(updatedUser, id);
-        return NoContent();
+        return Ok(userRead);
     }
 
     [HttpDelete("{id}")]
@@ -54,10 +68,10 @@ public class UserController : ControllerBase
         var user = await _userService.GetByIdAsync(id);
         if (user == null)
         {
-            return NotFound();
+            return NotFound(new { message = "Error al eliminar usuario" });
         }
         await _userService.DeleteAsync(id);
-        return NoContent();
+        return Ok(id);
     }
 
 }

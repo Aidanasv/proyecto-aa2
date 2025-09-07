@@ -71,6 +71,14 @@ export const useSongStore = defineStore("songStore", () => {
         
     }
 
+    async function updatePlays(trackId: number) {
+        try {
+            await axios.post(`${buildApiUrl(API_ENDPOINTS.UPDATE_PLAYS)}/${trackId}`);
+        } catch (err: any) {
+            console.error('Error al actualizar reproducciones:', err);
+        }
+    }
+
     function resetSongs(): void {
         songs.value = null
     }
@@ -84,5 +92,6 @@ export const useSongStore = defineStore("songStore", () => {
         addSongs,
         deleteSongs,
         updateSongs,
+        updatePlays,
     }
 })

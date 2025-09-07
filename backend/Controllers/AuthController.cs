@@ -1,5 +1,7 @@
 namespace Controllers;
 
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services;
@@ -43,7 +45,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("Register")]
-    public IActionResult Register(UserRegisterPassword userRegister)
+    public async Task<IActionResult> Register(UserRegisterPassword userRegister)
     {
         try
         {
@@ -54,7 +56,34 @@ public class AuthController : ControllerBase
                 return BadRequest
                 ("Las contraseñas deben coincidir");
             }
-            var token = _authService.Register(userRegister);
+            var token = await _authService.Register(userRegister, Role.Client);
+            return Ok(token);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return Unauthorized(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest
+            ("Error generating the token: " + ex.Message);
+        }
+    }
+
+    [Authorize(Roles = Role.Admin)]
+    [HttpPost("Register/Admin")]
+    public async Task<IActionResult> RegisterAdmin(UserRegisterPassword userRegister)
+    {
+        try
+        {
+            if (!ModelState.IsValid) { return BadRequest(ModelState); }
+
+            if (userRegister.Password != userRegister.PasswordValidate)
+            {
+                return BadRequest
+                ("Las contraseñas deben coincidir");
+            }
+            var token = await _authService.Register(userRegister, Role.Admin);
             return Ok(token);
         }
         catch (KeyNotFoundException ex)
