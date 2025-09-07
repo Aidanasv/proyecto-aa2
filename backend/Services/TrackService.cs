@@ -12,10 +12,13 @@ public class TrackService : ITrackService
     private readonly ITrackEfRepository _trackRepository;
     private readonly IArtistEfRepository _artistRepository;
 
-    public TrackService(ITrackEfRepository trackRepository, IArtistEfRepository artistRepository)
+    private readonly IAlbumEfRepository _albumRepository;
+
+    public TrackService(ITrackEfRepository trackRepository, IArtistEfRepository artistRepository, IAlbumEfRepository albumEfRepository)
     {
         _trackRepository = trackRepository;
         _artistRepository = artistRepository;
+        _albumRepository = albumEfRepository;
     }
 
     public async Task<List<Track>> GetAllAsync()
@@ -49,9 +52,12 @@ public class TrackService : ITrackService
             Plays = trackCreate.Plays,
             ReleaseDate = trackCreate.ReleaseDate
         };
-
         await _trackRepository.AddAsync(track);
         await SaveTrack(track.Id, audioBytes);
+
+        var album = await _albumRepository.GetByIdAsync(trackCreate.AlbumId);
+        album.Duration += trackCreate.Duration;
+        await _albumRepository.UpdateAsync(album);
         return track;
     }
 
@@ -62,6 +68,8 @@ public class TrackService : ITrackService
         {
             throw KeyNotFoundException("Canción no encontrada");
         }
+        var album = await _albumRepository.GetByIdAsync(updatedTrack.AlbumId);
+        album.Duration = album.Duration - updatedTrack.Duration;
 
         updatedTrack.Name = track.Name;
         updatedTrack.Duration = track.Duration;
@@ -70,6 +78,10 @@ public class TrackService : ITrackService
         updatedTrack.Plays = track.Plays;
 
         await _trackRepository.UpdateAsync(updatedTrack);
+
+        album.Duration = album.Duration + track.Duration;
+        await _albumRepository.UpdateAsync(album);
+
         return updatedTrack;
     }
 
@@ -83,6 +95,10 @@ public class TrackService : ITrackService
         track.SoftDelete = true;
 
         await _trackRepository.UpdateAsync(track);
+
+        var album = await _albumRepository.GetByIdAsync(track.AlbumId);
+        album.Duration = album.Duration - track.Duration;
+        await _albumRepository.UpdateAsync(album);
     }
 
     public async Task<byte[]?> GetTrackFromAPI(string trackName)
@@ -102,7 +118,6 @@ public class TrackService : ITrackService
         {
             return null;
         }
-
     }
 
     public async Task SaveTrack(int id, byte[] audiobytes)
@@ -129,7 +144,7 @@ public class TrackService : ITrackService
 
         var fileBytes = System.IO.File.ReadAllBytes(filePath);
         return fileBytes;
-            
+
     }
 
     private Exception KeyNotFoundException(string v)

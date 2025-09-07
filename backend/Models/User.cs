@@ -23,7 +23,7 @@ public class UserCreate : UserRegister
 {
 
     public DateTime CreateDate { get; set; }
-    public DateTime LastLogin { get; set; }
+    public DateTime LastLogin { get; set; } //
     public string Role { get; set; }
 }
 

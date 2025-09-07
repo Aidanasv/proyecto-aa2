@@ -54,7 +54,16 @@ public class PlaylistService : IPlaylistService
         };
 
         await _playlistRepository.AddAsync(playlist);
-        return playlist;
+
+        var playlistRead = new PlaylistRead
+        {
+            Name = playlist.Name,
+            Description = playlist.Description,
+            Id = playlist.Id,
+            SoftDelete = playlist.SoftDelete
+        };
+
+        return playlistRead;
     }
 
     public async Task<PlaylistRead> UpdateAsync(PlaylistCreate playlist, int id)

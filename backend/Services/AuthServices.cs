@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 
 public class AuthService : IAuthService
 {
@@ -34,6 +35,9 @@ public class AuthService : IAuthService
             return "";
         }
 
+        user.LastLogin = DateTime.Now;
+        _repository.UpdateAsync(user);
+        
         var userToken = new UserToken
         {
             Id = user.Id,
@@ -42,7 +46,7 @@ public class AuthService : IAuthService
         return GenerateToken(userToken);
     }
 
-    public string Register(UserRegisterPassword userRegister)
+    public async Task<string> Register(UserRegisterPassword userRegister, string role)
     {
         var salt = GenerateSalt();
         var passwordHash = HashPassword(userRegister.Password, salt);
@@ -53,10 +57,10 @@ public class AuthService : IAuthService
             Email = userRegister.Email,
             Password = passwordHash,
             BirthDate = userRegister.BirthDate,
-            Role = Role.Client
+            Role = role
         };
 
-        _repository.AddAsync(user);
+        await _repository.AddAsync(user);
 
         var userToken = new UserToken
         {

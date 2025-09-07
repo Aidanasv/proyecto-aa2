@@ -17,7 +17,7 @@ public class ArtistController : ControllerBase
         _artistService = service;
     }
 
-    //Ontener artistas
+    //Obtener artistas
     [HttpGet]
     public async Task<ActionResult<List<ArtistRead>>> GetArtists([FromQuery] ArtistDtoParameters artistDtoParameters)
     {
@@ -136,7 +136,7 @@ public class ArtistController : ControllerBase
         await _artistService.DeleteAsync(id);
         return Ok(id);
     }
-
+    //Obtener albumes de artista
     [HttpGet("{id}/albums")]
     public async Task<ActionResult<ArtistDto>> GetAlbumsByArtists(int id)
     {

@@ -22,6 +22,7 @@ export const API_ENDPOINTS = {
   TRACKS: '/tracks',
   PLAYLISTS: '/playlists',
   AUDIOSONGS: '/tracks/audio',
+  UPDATE_PLAYS: '/tracks/audio',
 } as const;
 
 // Helper function para construir URLs completas

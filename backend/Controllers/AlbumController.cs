@@ -44,7 +44,6 @@ public class AlbumController : ControllerBase
         if (album == null)
         {
             return NotFound(new { message = "No se encontró el albúm" });
-
         }
 
         var albumRead = new AlbumRead
